@@ -19,6 +19,12 @@ dependencies {
 
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-mongodb', version: '2.1.8.RELEASE'
 
+    compile group: 'org.axonframework', name: 'axon-spring-boot-starter', version: '3.4.3'
+	compile group: 'org.axonframework.extensions.mongo', name: 'axon-mongo', version: '3.4.3'
+
+	compile group: 'org.axonframework', name: 'axon-kafka', version: '3.4.3'
+	compile group: 'org.springframework.kafka', name: 'spring-kafka', version: '2.2.8.RELEASE'
+
 	compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.48'
     compileOnly 'org.projectlombok:lombok:1.18.8'
     annotationProcessor 'org.projectlombok:lombok:1.18.8'
