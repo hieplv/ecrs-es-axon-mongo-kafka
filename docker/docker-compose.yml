@@ -1,0 +1,91 @@
+version: "2"
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:5.2.3
+    hostname: zookeeper
+    networks:
+      - kafkanet
+    ports:
+      - '32181:32181'
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 32181
+  kafka:
+    image: confluentinc/cp-kafka:5.2.3
+    hostname: kafka
+    networks:
+      - kafkanet
+    ports:
+      - '8082:8082'
+      - '9092:9092'
+      - '29092:29092'
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:32181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      # Following line is needed for Kafka versions 0.11+
+      # in case you run less than 3 Kafka brokers in your
+      # cluster because the broker config
+      # `offsets.topic.replication.factor` (default: 3)
+      # is now enforced upon topic creation
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    volumes:
+      - ./volume/kafka/data:/var/lib/kafka/data
+      - ./volume/kafka/config:/etc/kafka
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    networks:
+      - kafkanet
+    depends_on:
+      - zookeeper
+      - kafka
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    ports:
+      - 27017:27017
+    volumes:
+      - ./volume/mongo/db:/data/db
+      - ./volume/mongo/configdb:/data/configdb
+  mongo-express:
+    image: mongo-express:0.49
+    container_name: mongo-express
+    networks:
+      - kafkanet
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+  mysql-axon:
+    image: mysql:5.7
+    container_name: mysql-axon
+    networks:
+      - kafkanet
+    restart: always
+    depends_on:
+      - zookeeper
+      - kafka
+      - mongo
+    environment:
+      MYSQL_DATABASE: test
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - 3314:3306
+    volumes:
+      - ./volume/mysql/initdb.d:/docker-entrypoint-initdb.d
+      - ./volume/mysql/conf.d:/etc/mysql/conf.d
+      - ./volume/mysql/log:/var/log/mysql
+      - ./volume/mysql/db:/var/lib/mysql
+
+networks:
+  kafkanet:
+    driver: bridge
