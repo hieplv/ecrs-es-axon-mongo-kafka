@@ -1,24 +1,27 @@
 package com.example.demo.controller;
 
-import com.example.demo.command.Command;
-import com.example.demo.command.CommandDispatcher;
+import com.example.demo.command.CreateCustomerCommand;
 import com.example.demo.entity.request.Customer;
-import com.example.demo.repository.mongo.EventStoreRepository;
+import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.axonframework.queryhandling.QueryGateway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 @RestController
 public class CustomerController {
     @Autowired
-    CommandDispatcher commandDispatcher;
+    private CommandGateway commandGateway;
+    @Autowired
+    private QueryGateway queryGateway;
 
     @RequestMapping(value = "/api/customer/add", method = RequestMethod.POST)
     public Customer addCustomer(@RequestBody Customer customer) {
-        commandDispatcher.notifyObservers(new Command() {
-        });
+        commandGateway.send(new CreateCustomerCommand(UUID.randomUUID(), customer));
         return null;
     }
 }

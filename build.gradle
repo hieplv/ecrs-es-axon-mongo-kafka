@@ -17,10 +17,10 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
-	compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-mongodb', version: '2.1.8.RELEASE'
-
     compile group: 'org.axonframework', name: 'axon-spring-boot-starter', version: '3.4.3'
-	compile group: 'org.axonframework.extensions.mongo', name: 'axon-mongo', version: '3.4.3'
+
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-mongodb', version: '2.1.8.RELEASE'
+	compile group: 'org.axonframework', name: 'axon-mongo', version: '3.4.3'
 
 	compile group: 'org.axonframework', name: 'axon-kafka', version: '3.4.3'
 	compile group: 'org.springframework.kafka', name: 'spring-kafka', version: '2.2.8.RELEASE'
