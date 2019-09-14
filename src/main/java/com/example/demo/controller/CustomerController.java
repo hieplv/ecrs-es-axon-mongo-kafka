@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.command.CreateCustomerCommand;
+import com.example.demo.entity.command.CreateCustomerCommand;
 import com.example.demo.entity.request.Customer;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.queryhandling.QueryGateway;
@@ -21,7 +21,7 @@ public class CustomerController {
 
     @RequestMapping(value = "/api/customer/add", method = RequestMethod.POST)
     public Customer addCustomer(@RequestBody Customer customer) {
-        commandGateway.send(new CreateCustomerCommand(UUID.randomUUID(), customer));
+        commandGateway.send(new CreateCustomerCommand(UUID.randomUUID().toString(), customer));
         return null;
     }
 }

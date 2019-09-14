@@ -3,6 +3,7 @@ package com.example.demo.entity.jpa;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
@@ -13,8 +14,9 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class Address {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private int id;
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    private String id;
 
     private String zipcode;
     private String address1;
