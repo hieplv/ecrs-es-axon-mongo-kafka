@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.command.CreateCustomerCommand;
 import com.example.demo.entity.request.Customer;
-import com.example.demo.service.KafkaProducerService;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.queryhandling.QueryGateway;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +19,9 @@ public class CustomerController {
     @Autowired
     private QueryGateway queryGateway;
 
-    @Autowired
-    KafkaProducerService kafkaProducerService;
-
     @RequestMapping(value = "/api/customer/add", method = RequestMethod.POST)
     public Customer addCustomer(@RequestBody Customer customer) {
-        commandGateway.send(new CreateCustomerCommand(UUID.randomUUID().toString(), kafkaProducerService, customer));
+        commandGateway.send(new CreateCustomerCommand(UUID.randomUUID().toString(), customer));
         return null;
     }
 }
