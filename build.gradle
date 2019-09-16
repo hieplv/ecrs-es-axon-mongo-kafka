@@ -23,7 +23,7 @@ dependencies {
 
 	compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.48'
 
-	compile group: 'org.apache.kafka', name: 'kafka-clients', version: '2.3.0'
+	compile group: 'org.apache.kafka', name: 'kafka_2.12', version: '2.3.0'
 	compile group: 'org.axonframework.extensions.kafka', name: 'axon-kafka-spring-boot-starter', version: '4.0-RC2'
 	compile group: 'org.axonframework.extensions.springcloud', name: 'axon-springcloud-spring-boot-starter', version: '4.2'
 
